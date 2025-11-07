@@ -11,12 +11,12 @@ type TabKey = 'analyze' | 'generate' | 'history' | 'settings'
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabKey>('analyze')
-  const tabs: { key: TabKey; label: string }[] = useMemo(
+  const tabs: { key: TabKey; label: string; icon: string }[] = useMemo(
     () => [
-      { key: 'analyze', label: 'Analyze Password' },
-      { key: 'generate', label: 'Generate Password' },
-      { key: 'history', label: 'History' },
-      { key: 'settings', label: 'Settings' },
+      { key: 'analyze', label: 'Analyze Password', icon: '🔍' },
+      { key: 'generate', label: 'Generate Password', icon: '⚡' },
+      { key: 'history', label: 'History', icon: '📜' },
+      { key: 'settings', label: 'Settings', icon: '⚙️' },
     ],
     []
   )
@@ -42,18 +42,22 @@ function App() {
           <img src='/pwdapplogo.png' alt='PwdGuard Logo' className='app-logo' />
           <h1>PwdGuard</h1>
         </div>
-        <nav className='tabs'>
+        <nav className='tabs' role='tablist' aria-label='Main navigation'>
           {tabs.map(t => (
             <button
               key={t.key}
               className={activeTab === t.key ? 'tab active' : 'tab'}
               onClick={() => setActiveTab(t.key)}
+              role='tab'
+              aria-selected={activeTab === t.key}
+              aria-controls={`${t.key}-panel`}
+              title={t.label}
             >
-              {t.label}
+              <span aria-hidden='true'>{t.icon}</span> {t.label}
             </button>
           ))}
         </nav>
-        <main className='tab-content'>
+        <main className='tab-content' role='tabpanel' id={`${activeTab}-panel`} aria-labelledby={activeTab}>
           {activeTab === 'analyze' && <AnalyzePassword />}
           {activeTab === 'generate' && <GeneratePassword />}
           {activeTab === 'history' && <PasswordHistory />}

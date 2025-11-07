@@ -132,6 +132,7 @@
   height: 100%;
   z-index: 0;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .app-content {
